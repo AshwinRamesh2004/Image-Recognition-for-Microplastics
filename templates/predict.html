@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microplastic Detector | ML Project</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #28a745;
+            --background-color: #f4f7fa;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            flex: 1;
+        }
+
+        .drop-area {
+            border: 3px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .image-preview {
+            min-height: 250px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        /* Confidence Bar */
+        .confidence-container {
+            margin-top: 15px;
+        }
+
+        .confidence-label {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .confidence-bar-bg {
+            width: 100%;
+            height: 18px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .confidence-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            transition: width 0.6s ease-in-out;
+        }
+
+        .confidence-bar-fill.high {
+            background-color: var(--danger-color);
+        }
+
+
+        .status-indicator.high { background: var(--danger-color); color: white; padding: 4px 10px; }
+        .status-indicator.low { background: var(--secondary-color); color: white; padding: 4px 10px; }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌊 Microplastic Detection Tool</h1>
+    <p>Upload an image to analyze microplastic contamination</p>
+</header>
+
+<main class="container">
+    <section class="card">
+        <h2>Upload Image</h2>
+
+        <div class="drop-area">
+            <p>Select an image</p>
+            <input type="file" id="imageUpload" accept="image/*" hidden>
+            <button class="btn btn-primary" id="browseBtn">Browse</button>
+        </div>
+
+        <p id="fileName">No file selected</p>
+
+        <button class="btn btn-secondary" id="analyzeButton" disabled>
+            Analyze Image
+        </button>
+    </section>
+
+    <section class="card">
+        <h2>Results</h2>
+
+        <div class="image-preview" id="imagePreview">
+            <p>Image preview here</p>
+        </div>
+
+        <div id="analysisOutput">
+            <p>Click Analyze to see results</p>
+        </div>
+    </section>
+</main>
+
+<footer style="text-align:center;margin:30px;">
+    &copy; 2025 ML Detection Project
+</footer>
+
+<!-- ✅ SCRIPT MUST BE HERE -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const imageUpload = document.getElementById("imageUpload");
+    const browseBtn = document.getElementById("browseBtn");
+    const analyzeButton = document.getElementById("analyzeButton");
+    const fileName = document.getElementById("fileName");
+    const imagePreview = document.getElementById("imagePreview");
+    const analysisOutput = document.getElementById("analysisOutput");
+
+    let selectedFile = null;
+
+    browseBtn.addEventListener("click", () => {
+        imageUpload.click();
+    });
+
+    imageUpload.addEventListener("change", () => {
+        selectedFile = imageUpload.files[0];
+        if (!selectedFile) return;
+
+        fileName.textContent = selectedFile.name;
+        analyzeButton.disabled = false;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            imagePreview.innerHTML = `<img src="${e.target.result}">`;
+        };
+        reader.readAsDataURL(selectedFile);
+    });
+
+    analyzeButton.addEventListener("click", async () => {
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+
+        analysisOutput.innerHTML = "<p>Analyzing...</p>";
+
+        const response = await fetch("/predict", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        const barClass = result.risk_level.toLowerCase() === "high" ? "high" : "";
+
+            analysisOutput.innerHTML = `
+                <div class="result-item">
+                    <strong>Prediction:</strong>
+                    <span>${result.label}</span>
+                </div>
+
+                <div class="result-item">
+                    <strong>Risk:</strong>
+                    <span class="status-indicator ${result.risk_level.toLowerCase()}">
+                        ${result.risk_level}
+                    </span>
+                </div>
+
+                <div class="confidence-container">
+                    <div class="confidence-label">
+                        Confidence: ${result.confidence}%
+                    </div>
+                    <div class="confidence-bar-bg">
+                        <div class="confidence-bar-fill ${barClass}" 
+                            style="width: ${result.confidence}%;">
+                        </div>
+                    </div>
+                </div>
+            `;
+
+    });
+
+});
+</script>
+
+</body>
+</html>

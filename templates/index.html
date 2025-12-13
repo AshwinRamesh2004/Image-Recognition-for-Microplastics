@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microplastic Detector | Project Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #28a745;
+            --dark-color: #343a40;
+            --light-bg: #f4f7fa;
+            --white: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { font-family: var(--font-family); color: #333; line-height: 1.6; }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); }
+        .logo span { color: var(--secondary-color); }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            margin-left: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary-color); }
+        .btn-nav {
+            background: var(--primary-color);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1621451537084-482c73073a0f?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin-bottom: 30px; }
+        
+        .btn-hero {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        .btn-hero:hover { transform: scale(1.05); background: #218838; }
+
+        /* Sections General */
+        section { padding: 80px 10%; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--dark-color); }
+        .section-title p { color: #666; margin-top: 10px; }
+
+        /* About / Problem */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-text h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--primary-color); }
+        .about-img img { width: 100%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* Stats */
+        .stats { background: var(--primary-color); color: white; display: flex; justify-content: space-around; padding: 60px 10%; flex-wrap: wrap; }
+        .stat-box { text-align: center; margin: 20px; }
+        .stat-box h3 { font-size: 3rem; font-weight: 700; }
+        .stat-box p { font-size: 1.1rem; opacity: 0.9; }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .tech-card {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .tech-card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; }
+
+        /* Team */
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .team-member {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .team-member h4 { margin: 10px 0 5px; color: var(--dark-color); }
+        .team-member span { color: #777; font-size: 0.9rem; }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .nav-links { display: flex; flex-direction: column; gap: 10px; text-align: center; }
+            .nav-links a { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Micro<span>Detect</span></div>
+        <div class="nav-links">
+            <a href="#about">About Project</a>
+            <a href="#tech">Technology</a>
+            <a href="#team">Team</a>
+            <a href="{{ url_for('predict_page') }}" class="btn-nav">Launch Tool</a>
+
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>AI-Powered Microplastic Detection</h1>
+        <p>Using Deep Learning and Computer Vision to analyze water samples and identify microscopic pollutants instantly.</p>
+        <a href="{{ url_for('predict_page') }}" class="btn-hero">Try the Detector Now</a>
+
+    </header>
+
+    <div class="stats">
+        <div class="stat-box">
+            <h3>92%</h3>
+            <p>Model Accuracy</p>
+        </div>
+        <div class="stat-box">
+            <h3>&lt;5mm</h3>
+            <p>Particle Detection Size</p>
+        </div>
+        <div class="stat-box">
+            <h3>0.4s</h3>
+            <p>Processing Speed</p>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="section-title">
+            <h2>The Problem & Solution</h2>
+            <p>Why this B.Tech project matters</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>The Invisible Threat</h3>
+                <p>Microplastics are plastic fragments less than 5mm in length. They are becoming a pervasive environmental hazard, entering our oceans, food chain, and even drinking water.</p>
+                <br>
+                <h3>Our Approach</h3>
+                <p>Manual counting of microplastics under a microscope is tedious and error-prone. Our project automates this using <strong>Convolutional Neural Networks (CNN)</strong>. By uploading a microscopic image of a water sample, our system classifies and counts plastic particles in real-time.</p>
+            </div>
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=2080&auto=format&fit=crop" alt="Microscope view">
+            </div>
+        </div>
+    </section>
+
+    <section id="tech" style="background-color: var(--light-bg);">
+        <div class="section-title">
+            <h2>Technology Stack</h2>
+            <p>The tools and algorithms powering the core</p>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <i class="fab fa-python"></i>
+                <h4>Python</h4>
+                <p>Core programming language for backend and ML logic.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-brain"></i>
+                <h4>TensorFlow / Keras</h4>
+                <p>Used to build and train the Convolutional Neural Network.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-eye"></i>
+                <h4>OpenCV</h4>
+                <p>Image pre-processing, noise reduction, and segmentation.</p>
+            </div>
+            <div class="tech-card">
+                <i class="fas fa-server"></i>
+                <h4>Flask API</h4>
+                <p>Connects the ML model to this web interface.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pipeline">
+        <div class="section-title">
+            <h2>How It Works</h2>
+        </div>
+        <div style="display: flex; justify-content: space-between; text-align: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <i class="fas fa-upload" style="font-size: 2rem; color: var(--secondary-color); margin-bottom:10px;"></i>
+                <h4>1. Upload</h4>
+                <p>User uploads microscopic image.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <i class="fas fa-filter" style="font-size: 2rem; color: var(--secondary-color); margin-bottom:10px;"></i>
+                <h4>2. Pre-process</h4>
+                <p>Image is converted to grayscale & filtered.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <i class="fas fa-microchip" style="font-size: 2rem; color: var(--secondary-color); margin-bottom:10px;"></i>
+                <h4>3. Analyze</h4>
+                <p>CNN Model extracts features.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <i class="fas fa-chart-bar" style="font-size: 2rem; color: var(--secondary-color); margin-bottom:10px;"></i>
+                <h4>4. Result</h4>
+                <p>Risk level and confidence score displayed.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="team" style="background-color: var(--light-bg);">
+        <div class="section-title">
+            <h2>Our Team</h2>
+            <p>Developed by Final Year B.Tech Students</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-member">
+                <i class="fas fa-user-graduate" style="font-size: 3rem; color: #ddd; margin-bottom: 10px;"></i>
+                <h4>Student Name 1</h4>
+                <span>Lead Developer (ML)</span>
+            </div>
+            <div class="team-member">
+                <i class="fas fa-user-graduate" style="font-size: 3rem; color: #ddd; margin-bottom: 10px;"></i>
+                <h4>Student Name 2</h4>
+                <span>Frontend & Backend</span>
+            </div>
+            <div class="team-member">
+                <i class="fas fa-user-graduate" style="font-size: 3rem; color: #ddd; margin-bottom: 10px;"></i>
+                <h4>Student Name 3</h4>
+                <span>Data Analysis</span>
+            </div>
+            <div class="team-member">
+                <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: #ddd; margin-bottom: 10px;"></i>
+                <h4>Prof. Guide Name</h4>
+                <span>Project Guide</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Microplastic Detection Project | Dept. of Computer Science</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+tensorflow>=2.10
+numpy
+matplotlib
+scikit-learn
+scikit-image
+opencv-python-headless
+flask
