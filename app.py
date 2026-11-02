@@ -18,7 +18,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model", "microplastics_model.keras")
 
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH,)
 
 CLASS_NAMES = ["Clean Water", "Microplastics"]
 
